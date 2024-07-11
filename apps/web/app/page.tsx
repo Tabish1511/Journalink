@@ -1,27 +1,36 @@
 "use client"
 import { useEffect, useState } from 'react'
+import {ChatComponent} from '@repo/ui/chatComponent'
 
 const WebSocketComponent = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [allMessages, setAllMessages] = useState<string[]>([]);
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    const newSocket = new WebSocket('https://journalink-oh7b.onrender.com');
+    const newSocket = new WebSocket('ws://localhost:8080');
     newSocket.onopen = () => {
       console.log('Connection established');
-      newSocket.send('Hello Server!');
+      setSocket(newSocket);
     }
     newSocket.onmessage = (message) => {
-      console.log('Message received:', message.data);
+      console.log('Message received:', message);
+      setAllMessages(prevMessages => [...prevMessages, message.data])
     }
-    setSocket(newSocket);
-    return () => newSocket.close();
+    
   }, [])
 
-  return (
-    <>
-      hi there
-    </>
-  )
+  if(!socket){
+    return <div>
+      Loading messages...
+    </div>
+  }
+
+  return <div>
+      <ChatComponent/>   
+      </div>
+  
+  
 }
 
 WebSocketComponent.displayName = 'WebSocketComponent';
@@ -56,6 +65,26 @@ export default WebSocketComponent;
 
 
 
+{/* BELOW IS CODE FOR MAPPING THROUGH MESSAGES --- RAW */}
+
+
+{/* hi there
+      
+      <input onChange={(e) => {
+        setMessage(e.target.value);
+      }} value={message} placeholder='Type your message'></input>
+      
+      <button onClick={() => {
+        socket.send(message);
+      }}>Send</button> <br/>
+
+      <div>
+        {Object.entries(allMessages).map(([key, value]) => (
+          <div key={key}>
+            {value}
+          </div>
+        ))}
+      </div> */}
 
 
 
@@ -78,11 +107,7 @@ export default WebSocketComponent;
 
 
 
-
-
-
-
-// import Image from "next/image";
+{/* // import Image from "next/image";
 // import { Button } from "@repo/ui/button";
 // import styles from "./page.module.css";
 
@@ -183,4 +208,4 @@ export default WebSocketComponent;
 //       </footer>
 //     </div>
 //   );
-// }
+// }*/}
