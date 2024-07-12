@@ -8,7 +8,7 @@ const WebSocketComponent = () => {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    const newSocket = new WebSocket('ws://localhost:8080');
+    const newSocket = new WebSocket('https://journalink-oh7b.onrender.com');
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);
