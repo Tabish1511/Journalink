@@ -14,51 +14,9 @@ wss.on('connection', function connection(ws) {
   ws.on('message', function message(data, isBinary) {
 
     wss.clients.forEach(function each(client) {
-      // if (client.readyState === WebSocket.OPEN) {
       if (client.readyState === 1) {
         client.send(data, { binary: isBinary });
       }
     });
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import express from "express";
-
-// const app = express()
-
-// app.get("/", (req, res) => {
-//     res.json({
-//         message: "hello world"
-//     });
-// })
-
-// app.listen(8080, () => {
-//     console.log("Listening on port 8080");
-// })
