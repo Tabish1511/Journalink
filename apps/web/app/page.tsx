@@ -8,8 +8,6 @@ const WebSocketComponent = () => {
   const [message, setMessage] = useState<string>("");
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
 
-  console.log(baseEndpoint)
-
   useEffect(() => {
     const newSocket = new WebSocket(baseEndpoint);
     newSocket.onopen = () => {
