@@ -6,10 +6,10 @@ const WebSocketComponent = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [allMessages, setAllMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
+  const baseEndPoint = process.env.NEXT_PUBLIC_API_URL || '';
 
   useEffect(() => {
-    // const newSocket = new WebSocket('https://journalink-oh7b.onrender.com');
-    const newSocket = new WebSocket('ws://localhost:8080');
+    const newSocket = new WebSocket(baseEndPoint);
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);
