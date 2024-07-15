@@ -9,7 +9,8 @@ const WebSocketComponent = () => {
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
   useEffect(() => {
-    const newSocket = new WebSocket(process.env.NODE_ENV === 'production' ? baseEndpoint : 'http://localhost:8080');
+    // const newSocket = new WebSocket(process.env.NODE_ENV === 'production' ? baseEndpoint : 'http://localhost:8080');
+    const newSocket = new WebSocket(baseEndpoint);
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);
