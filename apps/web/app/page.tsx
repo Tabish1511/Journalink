@@ -10,7 +10,7 @@ const WebSocketComponent = () => {
 
   useEffect(() => {
     // const newSocket = new WebSocket(baseEndpoint);
-    const newSocket = new WebSocket('https://journalink-web.vercel.app');
+    const newSocket = new WebSocket('https://journalink-oh7b.onrender.com');
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);
