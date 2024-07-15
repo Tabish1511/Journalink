@@ -6,7 +6,7 @@ const WebSocketComponent = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [allMessages, setAllMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
-  const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
+  const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string || 'https://journalink-web.vercel.app';
 
   useEffect(() => {
     const newSocket = new WebSocket(baseEndpoint);
