@@ -6,10 +6,11 @@ const WebSocketComponent = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [allMessages, setAllMessages] = useState<string[]>([]);
   const [message, setMessage] = useState<string>("");
-  const baseEndpoint = 'https://journalink-web.vercel.app';
+  // const baseEndpoint = 'https://journalink-web.vercel.app';
 
   useEffect(() => {
-    const newSocket = new WebSocket(baseEndpoint);
+    // const newSocket = new WebSocket(baseEndpoint);
+    const newSocket = new WebSocket('https://journalink-web.vercel.app');
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);
