@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react'
 import {ChatComponent} from '@repo/ui/chatComponent'
+import {AllMessagesComponent} from '@repo/ui/allMessagesComponent'
 
 const WebSocketComponent = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -30,6 +31,7 @@ const WebSocketComponent = () => {
   return <div className='h-screen flex justify-center'>
       <div className='w-2/6 flex flex-col justify-center'>
         <ChatComponent messagesObject={allMessages} />
+        <AllMessagesComponent messagesObject={allMessages} />
         <div className='flex justify-center'>
           <input className='rounded-lg bg-indigo-800 border-sky-500 w-4/5 py-4'
           onChange={(e) => {
