@@ -1,9 +1,9 @@
 import ChatComponent from '@repo/ui/chatComponent'
 
-export default function Home() {
+export default function Chat() {
   return (
     <div>
-      Landing Page
+      <ChatComponent />
     </div>
   )
 }
