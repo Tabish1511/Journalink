@@ -8,7 +8,8 @@
     "./code": "./src/code.tsx",
     "./chatComponent": "./src/chatComponent.tsx",
     "./messageComponent": "./src/messageComponent.tsx",
-    "./allMessagesComponent": "./src/allMessagesComponent.tsx"
+    "./allMessagesComponent": "./src/allMessagesComponent.tsx",
+    "./appBar": "./src/appBar.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
