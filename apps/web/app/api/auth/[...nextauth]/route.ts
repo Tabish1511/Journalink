@@ -17,7 +17,13 @@ const handler = NextAuth({
         },
       })
   ],
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async redirect({url, baseUrl}){
+        console.log("CALLBACK RUNNING");
+        return baseUrl + '/chat';
+    }
+  }
 })
 
 export { handler as GET, handler as POST }
