@@ -9,7 +9,7 @@ export default function ChatComponent() {
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
 
   useEffect(() => {
-    const newSocket = new WebSocket(baseEndpoint);
+    const newSocket = new WebSocket(`${baseEndpoint}/api/v1/chatWs`);
     newSocket.onopen = () => {
       console.log('Connection established');
       setSocket(newSocket);

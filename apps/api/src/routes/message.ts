@@ -1,8 +1,9 @@
-import { Router } from "express";
+import { Router } from 'express';
 const messageRouter = Router();
+import { wss } from '../websocket'; // Import the WebSocket server if needed
 
-messageRouter.get("/", (req, res) => {
-  res.send("Hello, messageRoute!");
+messageRouter.get('/test', (req, res) => {
+  res.send('Hello, messageRoute!');
 });
 
 export default messageRouter;
