@@ -4,9 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -b",
-    "dev": "tsc -b && node dist/index.js",
-    "prisma:generate": "prisma generate"
+    "build": "tsc -b && prisma generate",
+    "dev": "tsc -b && node dist/index.js"
   },
   "keywords": [],
   "author": "",
