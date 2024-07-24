@@ -1,5 +1,8 @@
 import { WebSocketServer } from 'ws';
 import { httpServer } from './index';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 const wss = new WebSocketServer({ server: httpServer, path: '/api/v1/chatWs' });
 
