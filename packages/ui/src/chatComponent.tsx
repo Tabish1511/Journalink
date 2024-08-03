@@ -11,9 +11,24 @@ export default function ChatComponent() {
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
 
   useEffect(() => {
-    axios.get(`${baseEndpoint}/api/v1/message/messages`)
-      .then(response => {
-        const prevMessages = response.data.map((message: any) => message.content);
+
+    // Ensure the environment variable for Redis worker URL is defined
+    // const redisWorkerUrl = process.env.NEXT_REDIS_WORKER_URL;
+    // if (!redisWorkerUrl) {
+    //   console.error("REDIS_WORKER_URL is not defined.");
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    const getAllMessagesPromise = axios.get(`${baseEndpoint}/api/v1/message/messages`);
+    // const spinUpRedisWorkerPromise = axios.get(redisWorkerUrl);
+    // const spinUpRedisWorkerPromise = axios.get("https://journalink-redis-worker.onrender.com");
+    const spinUpRedisWorkerPromise = axios.get("http://localhost:4000");
+    
+    Promise.all([getAllMessagesPromise, spinUpRedisWorkerPromise])  
+      .then(([messagesResponse, redisWorkerResponse]) => {
+        console.log('Messages fetched:', messagesResponse);
+        const prevMessages = messagesResponse.data.map((message: any) => message.content);
         setAllMessages(prevMessages);
         setIsLoading(false); // Set loading to false after messages are fetched
       })
@@ -75,14 +90,29 @@ export default function ChatComponent() {
 
 
 
+// axios.get(`${baseEndpoint}/api/v1/message/messages`)
+//       .then(response => {
+//         const prevMessages = response.data.map((message: any) => message.content);
+//         setAllMessages(prevMessages);
+//         setIsLoading(false); // Set loading to false after messages are fetched
+//       })
+//       .catch(error => console.error("Failed to fetch messages:", error));
 
 
 
 
 
 
-
-
+// const getAllMessagesPromise = axios.get(`${baseEndpoint}/api/v1/message/messages`);
+//     const spinUpRedisWorkerPromise = axios.get(process.env.REDIS_WORKER_URL as string);
+//     Promise.all([getAllMessagesPromise, spinUpRedisWorkerPromise])  
+//       .then(response => {
+//         console.log('Messages fetched:', response);
+//         const prevMessages = response[0].data.map((message: any) => message.content);
+//         setAllMessages(prevMessages);
+//         setIsLoading(false); // Set loading to false after messages are fetched
+//       })
+//       .catch(error => console.error("Failed to fetch messages:", error));
 
 
 
