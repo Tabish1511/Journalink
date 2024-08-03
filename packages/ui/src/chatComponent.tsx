@@ -13,24 +13,21 @@ export default function ChatComponent() {
   useEffect(() => {
 
     // Ensure the environment variable for Redis worker URL is defined
-    // const redisWorkerUrl = process.env.NEXT_REDIS_WORKER_URL;
-    // if (!redisWorkerUrl) {
-    //   console.error("REDIS_WORKER_URL is not defined.");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (!process.env.NEXT_PUBLIC_REDIS_WORKER_URL) {
+      console.error("REDIS_WORKER_URL is not defined.");
+      setIsLoading(true); 
+      return;
+    }
 
     const getAllMessagesPromise = axios.get(`${baseEndpoint}/api/v1/message/messages`);
-    // const spinUpRedisWorkerPromise = axios.get(redisWorkerUrl);
-    // const spinUpRedisWorkerPromise = axios.get("https://journalink-redis-worker.onrender.com");
-    const spinUpRedisWorkerPromise = axios.get("http://localhost:4000");
-    
+    const spinUpRedisWorkerPromise = axios.get(process.env.NEXT_PUBLIC_REDIS_WORKER_URL as string);
+
     Promise.all([getAllMessagesPromise, spinUpRedisWorkerPromise])  
       .then(([messagesResponse, redisWorkerResponse]) => {
-        console.log('Messages fetched:', messagesResponse);
+        // console.log('Messages fetched:', messagesResponse);
         const prevMessages = messagesResponse.data.map((message: any) => message.content);
         setAllMessages(prevMessages);
-        setIsLoading(false); // Set loading to false after messages are fetched
+        setIsLoading(false); // Set loading to false after BOTH promises are resolved
       })
       .catch(error => console.error("Failed to fetch messages:", error));
 
