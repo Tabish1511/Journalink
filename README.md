@@ -1,6 +1,6 @@
 # JOURNALINK - INTERACTIVE BOOKMARKS MANAGER
 
-## BACKEND PROCESS:
+## Backend Process:
 ![Journalink Logo](./apps/web/public/journalink_BE_process_snap.png)
 
 ## Description:
