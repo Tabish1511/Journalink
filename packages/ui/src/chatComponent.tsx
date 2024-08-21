@@ -53,7 +53,7 @@ export default function ChatComponent() {
       <div className='w-2/6 flex flex-col justify-center'>
         <AllMessagesComponent messagesObject={allMessages} />
         <div className='flex justify-center'>
-          <input autoFocus className='rounded-lg bg-indigo-800 border-sky-500 w-4/5 py-4'
+          <input ref={inputRef} autoFocus className='rounded-lg bg-indigo-800 border-sky-500 w-4/5 py-4'
             onChange={(e) => setMessage(e.target.value)}
             value={message}
             placeholder='Type your message'></input>
