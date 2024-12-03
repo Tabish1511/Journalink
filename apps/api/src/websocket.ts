@@ -2,10 +2,14 @@ import { WebSocketServer } from 'ws';
 import { httpServer } from './index';
 import { createClient } from 'redis';
 
-const client = createClient({
-  url: process.env.EXTERNAL_REDIS_URL,
-});
+// const client = createClient({
+//   url: process.env.EXTERNAL_REDIS_URL,
+// });
+// const client = createClient();
 
+const client = createClient({
+  url: 'redis://journalink-redis:6379'
+});
 client.on('error', (err) => console.error('Redis client error:', err));
 
 const wss = new WebSocketServer({ server: httpServer, path: '/api/v1/chatWs' });

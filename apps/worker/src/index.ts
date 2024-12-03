@@ -6,26 +6,31 @@ import http from 'http';
 
 const prisma = new PrismaClient();
 
-const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {
-  // Set CORS headers
-  response.setHeader('Access-Control-Allow-Origin', '*'); // Or specify 'http://localhost:3000' instead of '*'
-  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {
+//   // Set CORS headers
+//   response.setHeader('Access-Control-Allow-Origin', '*'); // Or specify 'http://localhost:3000' instead of '*'
+//   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+//   response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (request.method === 'OPTIONS') {
-      response.writeHead(204);
-      response.end();
-      return;
-  }
+//   if (request.method === 'OPTIONS') {
+//       response.writeHead(204);
+//       response.end();
+//       return;
+//   }
 
-  response.writeHead(200, { 'Content-Type': 'text/plain' });
-  response.end('Hello, World!\n');
-};  
+//   response.writeHead(200, { 'Content-Type': 'text/plain' });
+//   response.end('Hello, World!\n');
+// };  
 
-const server = http.createServer(requestHandler);
+// const server = http.createServer(requestHandler);
+
+// const client = createClient({
+//   url: process.env.EXTERNAL_REDIS_URL,
+// });
+// const client = createClient();
 
 const client = createClient({
-  url: process.env.EXTERNAL_REDIS_URL,
+  url: 'redis://journalink-redis:6379'
 });
 
 console.log('redis Worker started');
@@ -44,31 +49,33 @@ async function processMessage(message: string) {
 }
 
 async function startWorker() {
-  
-  try{
-    await client.connect();
-    console.log('Connected to Redis from worker');
+  try {
+      await client.connect();
+      console.log('Connected to Redis from worker');
+  } catch (error) {
+      console.error('Failed to connect to Redis:', error);
+      return; // Exit if Redis connection fails
+  }
 
-    while (true) {
-      try {
-        const messageData = await client.brPop("newMessages", 0);
-        //@ts-ignore
-        if (messageData.element) {
-          //@ts-ignore
-          await processMessage(messageData.element);
-          console.log('Message processed in BG WORKER');
-        } else {
-          console.log('NO MESSAGE IN BG WORKER');
-        }
-      } catch (error) {
-        console.error("Error processing message:", error);
+  while (true) {
+      if (!client.isOpen) {
+          console.error('Redis connection lost. Exiting worker loop.');
+          break;
       }
-    }
-  }catch(e){
-    console.error('Error connecting to Redis:', e);
+      try {
+          const messageData = await client.brPop("newMessages", 0);
+          if (messageData?.element) {
+              await processMessage(messageData.element);
+              console.log('Message processed in BG WORKER');
+          } else {
+              console.log('NO MESSAGE IN BG WORKER');
+          }
+      } catch (error) {
+          console.error("Error processing message:", error);
+      }
   }
 }
 
 startWorker();
 
-server.listen(4000);
+// server.listen(4000);
