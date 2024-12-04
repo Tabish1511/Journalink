@@ -10,6 +10,8 @@ import messageRouter from './routes/message';
 
 // 5th TRY DEPLOY WORKFLOW - SECONDARY
 
+// 5th TRY DEPLOY WORKFLOW FINALLY TO EC2 - SECONDARY
+
 const app = express();
 app.use(cors());
 app.use(express.json());
