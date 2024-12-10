@@ -46,7 +46,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         source: ./docker-compose-server.yaml
-        target: /home/ubuntu/journalink/
+        target: /home/ubuntu/journalink-be/
 
     - name: Export DATABASE_URL to EC2
       uses: appleboy/ssh-action@master
@@ -71,8 +71,8 @@ jobs:
           sudo docker pull redis:latest
           
           # Stop and remove existing containers if they exist
-          sudo docker-compose -f /home/ubuntu/journalink/docker-compose-server.yaml down
+          sudo docker-compose -f /home/ubuntu/journalink-be/docker-compose-server.yaml down
           
           # Run docker-compose with updated images
-          sudo docker-compose -f /home/ubuntu/journalink/docker-compose-server.yaml up -d
+          sudo docker-compose -f /home/ubuntu/journalink-be/docker-compose-server.yaml up -d
 
