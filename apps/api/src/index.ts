@@ -3,6 +3,8 @@ import cors from 'cors';
 import userRouter from './routes/user';
 import messageRouter from './routes/message';
 
+// BUILD AND CHECK JOURNALINK DIRECTORIES IN EC2 SERVER
+
 const app = express();
 
 // Configure CORS
