@@ -57,7 +57,7 @@ export default function ChatComponent() {
           <input
             ref={inputRef}
             autoFocus
-            className="rounded-lg bg-indigo-800 border-sky-500 w-4/5 py-4"
+            className="rounded-lg bg-red-600 border-sky-500 w-4/5 py-4"
             onChange={(e) => setMessage(e.target.value)}
             value={message}
             placeholder="Type your message"
