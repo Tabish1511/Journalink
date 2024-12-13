@@ -9,10 +9,19 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: 'https://journalink-web.vercel.app', // Replace with your frontend's Vercel URL
-  methods: 'GET,POST,PUT,DELETE', // Allowed HTTP methods
-  credentials: true, // Allow cookies if needed
+  origin: (origin, callback) => {
+    const allowedOrigins = ['https://journalink-web.vercel.app', 'http://localhost:3000'];
+    // Allow requests without an origin (like tools or Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
 }));
+
 
 app.use(express.json());
 
