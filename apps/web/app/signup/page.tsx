@@ -40,9 +40,9 @@ return (
                         password
                     }, {
                         withCredentials: true,
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
+                        // headers: {
+                        //     "Content-Type": "application/json",
+                        // }
                     });
                     alert("You are logged in")
                     router.push("/chat");
