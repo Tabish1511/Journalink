@@ -52,7 +52,9 @@ userRouter.post("/signup", async (req, res) => {
 
     const token = jwt.sign({ id: newUser.id }, JWT_SECRET);
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: false
+    });
 
     res.status(201).json({
       message: "Signup successful",
