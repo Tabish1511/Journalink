@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import { AllMessagesComponent } from "@repo/ui/allMessagesComponent";
 
 export default function ChatComponent() {
@@ -11,29 +13,39 @@ export default function ChatComponent() {
   const [isLoading, setIsLoading] = useState(true);
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_REDIS_WORKER_URL) {
-      console.error("REDIS_WORKER_URL is not defined.");
-      setIsLoading(true);
+    const token = Cookies.get("token");
+
+    if (!token) {
+      console.log("NO TOKEN FOUND FROM /CHAT");
+      router.push("/");
       return;
     }
 
-    const getAllMessagesPromise = axios.get(
-      `${baseEndpoint}/api/v1/message/messages`
-    );
-
-    Promise.all([getAllMessagesPromise])
-      .then(([messagesResponse]) => {
+    const fetchMessages = async () => {
+      try {
+        const messagesResponse = await axios.get(
+          `${baseEndpoint}/api/v1/message/messages`,
+          { withCredentials: true }
+        );
         const prevMessages = messagesResponse.data.map(
           (message: any) => message.content
         );
         setAllMessages(prevMessages);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+      } finally {
         setIsLoading(false);
-      })
-      .catch((error) => console.error("Failed to fetch messages:", error));
+      }
+    };
 
-    const newSocket = new WebSocket(`${baseEndpoint}/api/v1/chatWs`);
+    fetchMessages();
+
+    const wsUrl = `${baseEndpoint.replace(/^http/, "ws")}/api/v1/chatWs?token=${token}`;
+    const newSocket = new WebSocket(wsUrl);
+
     newSocket.onopen = () => {
       console.log("Connection established");
       setSocket(newSocket);
@@ -43,9 +55,16 @@ export default function ChatComponent() {
       console.log("Message received:", message);
       setAllMessages((prevMessages) => [...prevMessages, message.data]);
     };
-  }, [baseEndpoint]);
 
-  if (!socket || isLoading) {
+    // Clean up WebSocket on component unmount
+    return () => {
+      if (newSocket.readyState === WebSocket.OPEN) {
+        newSocket.close();
+      }
+    };
+  }, [baseEndpoint, router]);
+
+  if (isLoading) {
     return <div>Loading messages...</div>;
   }
 

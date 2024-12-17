@@ -13,8 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        Int       @id @default(autoincrement()) // Unique identifier for each user.
+  email     String    @unique                      // Email address (must be unique).
+  password  String                                // User's password.
+  messages  Message[]                             // One-to-many relationship with Message.
+}
+
 model Message {
-  id        Int      @id @default(autoincrement())
-  content   String
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement()) // Unique identifier for each message.
+  content   String                                 // Message content.
+  createdAt DateTime  @default(now())              // Timestamp for message creation.
+  userId    Int?       @default(1)                   // Foreign key referencing User.
+  user      User?      @relation(fields: [userId], references: [id]) // Relationship with User.
 }

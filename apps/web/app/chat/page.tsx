@@ -1,23 +1,24 @@
 "use client";
 
-import ChatComponent from '@repo/ui/chatComponent'
-import { useSession } from "next-auth/react";
+import ChatComponent from "@repo/ui/chatComponent";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function Chat() {
-  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (!session && status !== "loading") {
+    const token = Cookies.get("token");
+    if (!token) {
+      console.log("NO TOKEN FOUND FROM /CHAT")
       router.push("/");
     }
-  }, [session, status, router]);
+  }, [router]);
 
   return (
     <div>
       <ChatComponent />
     </div>
-  )
+  );
 }

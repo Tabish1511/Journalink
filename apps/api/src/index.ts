@@ -1,11 +1,15 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import userRouter from './routes/user';
 import messageRouter from './routes/message';
 
 // BUILD AND CHECK JOURNALINK DIRECTORIES IN EC2 SERVER
 
 const app = express();
+app.use(cookieParser());
+app.use(express.json());
 
 // Configure CORS
 app.use(cors({

@@ -22,7 +22,10 @@
     "packages/*"
   ],
   "dependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/jsonwebtoken": "^9.0.7",
     "axios": "^1.7.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7"
   }
 }
