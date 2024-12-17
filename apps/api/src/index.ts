@@ -5,7 +5,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import userRouter from './routes/user';
 import messageRouter from './routes/message';
 
-// BUILD AND CHECK JOURNALINK DIRECTORIES IN EC2 SERVER
+// CHECK IF ALL DOCKER BUILDS RUNNING OKAY
 
 const app = express();
 app.use(cookieParser());
