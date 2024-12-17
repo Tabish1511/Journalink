@@ -14,7 +14,7 @@ app.use(express.json());
 // Configure CORS
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['https://journalink-web.vercel.app', 'http://localhost:3000'];
+    const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'http://localhost:3000'];
     // Allow requests without an origin (like tools or Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
