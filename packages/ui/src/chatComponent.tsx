@@ -16,13 +16,13 @@ export default function ChatComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    // const token = Cookies.get("token");
 
-    if (!token) {
-      console.log("NO TOKEN FOUND FROM /CHAT");
-      router.push("/");
-      return;
-    }
+    // if (!token) {
+    //   console.log("NO TOKEN FOUND FROM /CHAT");
+    //   router.push("/");
+    //   return;
+    // }
 
     const fetchMessages = async () => {
       try {
@@ -43,9 +43,10 @@ export default function ChatComponent() {
 
     fetchMessages();
 
-    const wsUrl = `${baseEndpoint.replace(/^http/, "ws")}/api/v1/chatWs?token=${token}`;
-    const newSocket = new WebSocket(wsUrl);
+    // const wsUrl = `${baseEndpoint.replace(/^http/, "ws")}/api/v1/chatWs?token=${token}`;
+    // const newSocket = new WebSocket(wsUrl);
 
+    const newSocket = new WebSocket(`${baseEndpoint}/api/v1/chatWs`);
     newSocket.onopen = () => {
       console.log("Connection established");
       setSocket(newSocket);
