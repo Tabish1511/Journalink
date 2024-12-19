@@ -38,8 +38,8 @@ return (
                     console.log("these are the inputs", email, password);
                     
                     await axios.post(`${baseEndpoint}/api/v1/user/signup`, {
-                        email,
-                        password
+                        email: email,
+                        password: password
                     }, {
                         withCredentials: true,
                         // headers: {
@@ -47,12 +47,12 @@ return (
                         // }
                     });
 
-                    console.log("email: ", email, ", password: ", password)
+                    console.log("email: ", email, ", password: ", password, "<<== THIS IS FOR SIGNUP PAGE, AFTER SIGNUP ENDPOINT AND RIGHT BEFORE /SIGNIN-CREDS")
                     
                     const result = await signIn("credentials", {
                         redirect: false,
-                        email,
-                        password,
+                        email: email,
+                        password: password,
                     });
 
                     if (result?.error) {

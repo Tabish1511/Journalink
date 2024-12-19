@@ -3,29 +3,20 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Appbar from "@repo/ui/appBar";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const session = await getSession();
-        if (session) {
-          router.push("/chat"); // Redirect to /chat if session exists
-        } else {
-          setLoading(false); // Allow the page to load if no session
-        }
-      } catch (error) {
-        console.error("Error checking session:", error);
-        setLoading(false); // Handle errors gracefully
-      }
-    };
-
-    checkSession();
-  }, [router]);
+    if (status === "authenticated") {
+      router.push("/chat");
+    } else if (status === "unauthenticated") {
+      setLoading(false);
+    }
+  }, [status]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -37,6 +28,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
