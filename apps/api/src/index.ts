@@ -6,20 +6,33 @@ import messageRouter from './routes/message';
 const app = express();
 
 // Configure CORS
+const allowedOrigins = [
+  'https://journalink-web-tabish1511s-projects.vercel.app',
+  'https://journalink-web.vercel.app',
+  'http://localhost:3000'
+];
+
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'https://journalink-web.vercel.app', 'http://localhost:3000'];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(`Blocked by CORS: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: 'GET,POST,PUT,DELETE'
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Allow credentials (e.g., cookies)
 }));
 
-// Setup routes
+// Middleware to parse JSON bodies
 app.use(express.json());
+
+// Preflight request handling
+app.options('*', cors());
+
+// Setup routes
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/message', messageRouter);
 
@@ -28,9 +41,10 @@ const httpServer = app.listen(8080, () => {
   console.log('API server running on port 8080');
 });
 
-export { httpServer };
-
+// WebSocket import (make sure it initializes properly)
 import './websocket';
+
+export { httpServer };
 
 
 

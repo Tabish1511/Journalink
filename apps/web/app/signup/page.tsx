@@ -37,10 +37,20 @@ return (
                     try {
                     console.log("these are the inputs", email, password);
                     
-                    await axios.post(`${baseEndpoint}/api/v1/user/signup`, {
-                        email: email,
-                        password: password
-                    });
+                    const response = await axios.post(
+                        `${baseEndpoint}/api/v1/user/signup`, 
+                        {
+                          email: email,
+                          password: password
+                        },
+                        {
+                          withCredentials: true,
+                          headers: {
+                            'Content-Type': 'application/json'
+                          }
+                        }
+                      );
+                      
 
                     console.log("email: ", email, ", password: ", password, "<<== THIS IS FOR SIGNUP PAGE, AFTER SIGNUP ENDPOINT AND RIGHT BEFORE /SIGNIN-CREDS")
                     
