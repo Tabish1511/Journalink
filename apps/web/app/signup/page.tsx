@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { signIn } from "next-auth/react";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -31,9 +32,10 @@ return (
                 }} type="password" className="bg-gray-900 p-2 rounded-lg"></input>
             </div>
             <div className="flex flex-col text-center">
-                <button onClick={async () => {
-                    console.log("these are the inputs" ,email, password);
-                    
+            <button 
+                onClick={async () => {
+                    try {
+                    console.log("these are the inputs", email, password);
                     
                     await axios.post(`${baseEndpoint}/api/v1/user/signup`, {
                         email,
@@ -44,11 +46,29 @@ return (
                         //     "Content-Type": "application/json",
                         // }
                     });
-                    alert("You are logged in")
-                    router.push("/chat");
 
+                    const result = await signIn("credentials", {
+                        redirect: false,
+                        email,
+                        password,
+                    });
 
-                }} className="bg-zinc-950 hover:bg-gray-900 flex items-center justify-center mb-2 p-6 rounded-lg">Sign in with credentials</button>
+                    if (result?.error) {
+                        console.error("Sign-in failed:", result.error);
+                        alert("Sign-in failed. Please check your credentials.");
+                        return;
+                    }
+
+                    // router.push("/chat");
+                    } catch (error) {
+                    console.error("An error occurred:", error);
+                    alert("Something went wrong. Please try again.");
+                    }
+                }} 
+                className="bg-zinc-950 hover:bg-gray-900 flex items-center justify-center mb-2 p-6 rounded-lg"
+                >
+                Sign in with credentials
+            </button>
             </div>
         </div>
     </div>

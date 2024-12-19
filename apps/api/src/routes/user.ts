@@ -53,7 +53,7 @@ userRouter.post("/signup", async (req, res) => {
     const token = jwt.sign({ id: newUser.id }, JWT_SECRET);
 
     res.cookie("token", token, {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "none",
       secure: true
     });
@@ -70,5 +70,62 @@ userRouter.post("/signup", async (req, res) => {
     });
   }
 });
+
+userRouter.post("/signin", async (req, res) => {
+  try {
+    const parsedBody = userSignupSchema.safeParse(req.body); // Assuming the schema applies for both signup and signin
+
+    if (!parsedBody.success) {
+      const errors = parsedBody.error.issues.map((issue) => issue.message);
+      res.status(400).json({ message: "Validation failed", errors });
+      return;
+    }
+
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Check if the password matches
+    if (user.password !== password) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    // Generate a token
+    const token = jwt.sign({ id: user.id }, JWT_SECRET);
+
+    // Set token as a cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+
+    // Respond with user data and token
+    res.status(200).json({
+      message: "Signin successful",
+      id: user.id,
+      email: user.email,
+      token,
+    });
+  } catch (error: any) {
+    console.error("Error during signin:", error.message);
+    res.status(500).json({
+      message: "An error occurred during signin",
+      error: error.message,
+    });
+  }
+});
+
 
 export default userRouter;

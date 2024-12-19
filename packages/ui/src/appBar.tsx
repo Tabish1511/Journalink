@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Appbar(){
     const router = useRouter();
+    const session = useSession();
 
     return (
         <div>
@@ -19,6 +20,9 @@ export default function Appbar(){
             <button onClick={() => {
                 signOut()
             }}>Logout</button>
+
+
+            {JSON.stringify(session)}
         </div>
     )
 }

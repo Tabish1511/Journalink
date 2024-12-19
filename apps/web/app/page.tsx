@@ -3,23 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Appbar from "@repo/ui/appBar";
-import Cookies from "js-cookie";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const token = Cookies.get("token");
-
-    if (token) {
-      console.log("TOKEN FOUND NOW DIRECTING TO /CHAT")
-      router.push("/chat");
-    } else {
-      console.log("NO TOKEN FOUND")
-      setLoading(false);
-    }
-  }, [router]);
+  // useEffect(() => {});
 
   if (loading) {
     return <div>Loading...</div>;
