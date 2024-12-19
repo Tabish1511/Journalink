@@ -14,11 +14,12 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
+    console.log(`Request Origin: ${origin}`);
     if (!origin || allowedOrigins.includes(origin)) {
       console.log(`CORS allowed for origin: ${origin}`);
       callback(null, true);
     } else {
-      console.error(`Blocked by CORS: ${origin}`);
+      console.error(`CORS blocked for origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -26,6 +27,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
