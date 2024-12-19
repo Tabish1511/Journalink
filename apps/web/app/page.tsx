@@ -3,12 +3,29 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Appbar from "@repo/ui/appBar";
+import { getSession } from "next-auth/react";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // useEffect(() => {});
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const session = await getSession();
+        if (session) {
+          router.push("/chat"); // Redirect to /chat if session exists
+        } else {
+          setLoading(false); // Allow the page to load if no session
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setLoading(false); // Handle errors gracefully
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -20,6 +37,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 

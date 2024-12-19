@@ -47,6 +47,8 @@ return (
                         // }
                     });
 
+                    console.log("email: ", email, ", password: ", password)
+                    
                     const result = await signIn("credentials", {
                         redirect: false,
                         email,
