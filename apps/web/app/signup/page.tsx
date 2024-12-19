@@ -40,11 +40,6 @@ return (
                     await axios.post(`${baseEndpoint}/api/v1/user/signup`, {
                         email: email,
                         password: password
-                    }, {
-                        withCredentials: true,
-                        // headers: {
-                        //     "Content-Type": "application/json",
-                        // }
                     });
 
                     console.log("email: ", email, ", password: ", password, "<<== THIS IS FOR SIGNUP PAGE, AFTER SIGNUP ENDPOINT AND RIGHT BEFORE /SIGNIN-CREDS")
@@ -61,7 +56,7 @@ return (
                         return;
                     }
 
-                    // router.push("/chat");
+                    router.push("/chat");
                     } catch (error) {
                     console.error("An error occurred:", error);
                     alert("Something went wrong. Please try again.");

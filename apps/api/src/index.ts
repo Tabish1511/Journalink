@@ -1,21 +1,14 @@
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import userRouter from './routes/user';
 import messageRouter from './routes/message';
 
-// CHECK IF ALL DOCKER BUILDS RUNNING OKAY
-
 const app = express();
-app.use(cookieParser());
-app.use(express.json());
 
 // Configure CORS
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'http://localhost:3000'];
-    // Allow requests without an origin (like tools or Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -23,23 +16,15 @@ app.use(cors({
     }
   },
   methods: 'GET,POST,PUT,DELETE',
-  credentials: true,
+  credentials: true, // Keep it for cross-origin credential sharing if needed
 }));
 
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.sendStatus(204); // No content for OPTIONS requests
-});
-
-
+// Setup routes
 app.use(express.json());
-
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/message', messageRouter);
 
+// Start server
 const httpServer = app.listen(8080, () => {
   console.log('API server running on port 8080');
 });
@@ -47,6 +32,92 @@ const httpServer = app.listen(8080, () => {
 export { httpServer };
 
 import './websocket';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import express from 'express';
+// import cookieParser from 'cookie-parser';
+// import cors from 'cors';
+// import jwt, { JwtPayload } from 'jsonwebtoken';
+// import userRouter from './routes/user';
+// import messageRouter from './routes/message';
+
+// const app = express();
+// app.use(cookieParser());
+// app.use(express.json());
+
+// // Configure CORS
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'http://localhost:3000'];
+//     // Allow requests without an origin (like tools or Postman)
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   methods: 'GET,POST,PUT,DELETE',
+//   credentials: true,
+// }));
+
+// app.options("*", (req, res) => {
+//   res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+//   res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+//   res.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.sendStatus(204); // No content for OPTIONS requests
+// });
+
+
+// app.use(express.json());
+
+// app.use('/api/v1/user', userRouter);
+// app.use('/api/v1/message', messageRouter);
+
+// const httpServer = app.listen(8080, () => {
+//   console.log('API server running on port 8080');
+// });
+
+// export { httpServer };
+
+// import './websocket';
 
 
 
