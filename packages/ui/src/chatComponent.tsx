@@ -5,6 +5,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { AllMessagesComponent } from "@repo/ui/allMessagesComponent";
+import { useSession } from 'next-auth/react';
 
 export default function ChatComponent() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -14,22 +15,20 @@ export default function ChatComponent() {
   const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const { data: session } = useSession();
 
   useEffect(() => {
-    // const token = Cookies.get("token");
-
-    // if (!token) {
-    //   console.log("NO TOKEN FOUND FROM /CHAT");
-    //   router.push("/");
-    //   return;
-    // }
 
     const fetchMessages = async () => {
       try {
+        //@ts-ignore
+        const userId = session?.user?.id;
+        if(!userId){
+          throw new Error("UserId not available in session");
+        }
+
         const messagesResponse = await axios.get(
-          `${baseEndpoint}/api/v1/message/messages`,
-          { withCredentials: true }
-        );
+          `${baseEndpoint}/api/v1/message/messages?userId=${userId}`);
         const prevMessages = messagesResponse.data.map(
           (message: any) => message.content
         );
@@ -71,6 +70,7 @@ export default function ChatComponent() {
 
   return (
     <div className="h-screen flex justify-center">
+      {session?.user?.email}
       <div className="w-2/6 flex flex-col justify-center">
         <AllMessagesComponent messagesObject={allMessages} />
         <div className="flex justify-center">

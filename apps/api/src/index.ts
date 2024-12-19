@@ -15,8 +15,7 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: true, // Keep it for cross-origin credential sharing if needed
+  methods: 'GET,POST,PUT,DELETE'
 }));
 
 // Setup routes

@@ -13,8 +13,14 @@ messageRouter.get('/test', (req, res) => {
 
 messageRouter.get('/messages', async (req, res) => {
   try {
-    // Fetch all messages (no authentication needed)
-    const messages = await prisma.message.findMany();
+    const userId = parseInt(req.query.userId as string, 10);
+    if (isNaN(userId)) {
+      return res.status(400).send("Invalid user ID");
+    }
+
+    const messages = await prisma.message.findMany({
+      where: { userId: userId },
+    });
 
     console.log("Messages fetched successfully");
     res.status(200).json(messages);

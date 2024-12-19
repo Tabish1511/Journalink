@@ -1,8 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
+import { PrismaClient } from "@prisma/client";
 
 const baseEndpoint = process.env.NEXT_PUBLIC_API_URL as string;
+const prisma = new PrismaClient();
 
 const handler = NextAuth({
   providers: [
@@ -14,24 +16,15 @@ const handler = NextAuth({
       },
       async authorize(credentials: any) {
         try {
-          console.log("'CREDS' CODE REACHED BEFORE THE SIGNIN AXIOS REQ");
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
 
-          const response = await axios.post(
-            `${baseEndpoint}/api/v1/user/signin`,
-            {
-              email: credentials.email,
-              password: credentials.password,
-            });
-
-          console.log("'CREDS' CODE REACHED AFTER THE SIGNIN AXIOS REQ");
-
-          const user = response.data;
-
-          if (!user || !user.id || !user.email) {
-            throw new Error("Invalid user data received from the server.");
+          if(user && user.password === credentials.password){
+            return { id: user.id.toString(), email: user.email }
           }
 
-          return { id: user.id, email: user.email };
+          return null;
         } catch (error: any) {
           console.error("Authorization error:", error);
           throw new Error(error.response?.data?.message || "Authorization failed.");
@@ -41,10 +34,18 @@ const handler = NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async redirect({ baseUrl }) {
-      console.log("CALLBACK RUNNING");
-      return `${baseUrl}/chat`;
-    },
+    jwt: async ({ user, token }: any) => {
+      if (user) {
+          token.uid = token.sub;
+      }
+      return token;
+      },
+    session: ({ session, token, user }: any) => {
+        if (session.user) {
+            session.user.id = token.sub;
+        }
+        return session
+    } 
   },
 });
 

@@ -4,16 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "next build && npx prisma generate",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.1.0",
     "@repo/ui": "*",
     "@types/js-cookie": "^3.0.6",
     "js-cookie": "^3.0.5",
     "next": "15.0.0-rc.0",
     "next-auth": "^4.24.7",
+    "prisma": "^6.1.0",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522"
   },
