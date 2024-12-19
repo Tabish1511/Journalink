@@ -14,9 +14,11 @@ messageRouter.get('/test', (req, res) => {
 messageRouter.get('/messages', async (req, res) => {
   try {
     const userId = parseInt(req.query.userId as string, 10);
-    if (isNaN(userId)) {
-      return res.status(400).send("Invalid user ID");
+    if (isNaN(userId) || !userId) {
+      return res.status(400).send("Invalid user ID or not available");
     }
+
+    console.log(userId);
 
     const messages = await prisma.message.findMany({
       where: { userId: userId },

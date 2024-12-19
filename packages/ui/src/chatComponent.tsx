@@ -70,7 +70,8 @@ export default function ChatComponent() {
 
   return (
     <div className="h-screen flex justify-center">
-      {session?.user?.email}
+      {/* @ts-ignore */}
+      {session?.user?.id}
       <div className="w-2/6 flex flex-col justify-center">
         <AllMessagesComponent messagesObject={allMessages} />
         <div className="flex justify-center">

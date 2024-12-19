@@ -8,7 +8,7 @@ const app = express();
 // Configure CORS
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'http://localhost:3000'];
+    const allowedOrigins = ['https://journalink-web-tabish1511s-projects.vercel.app', 'https://journalink-web.vercel.app', 'http://localhost:3000'];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
