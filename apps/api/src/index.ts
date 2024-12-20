@@ -4,6 +4,7 @@ import userRouter from './routes/user';
 import messageRouter from './routes/message';
 
 // CHECK IF ALL DOCKER BUILDS RUNNING OKAY
+// CHECK IF ALL DOCKER BUILDS RUNNING OKAY
 
 const app = express();
 
